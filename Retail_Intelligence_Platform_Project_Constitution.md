@@ -114,19 +114,23 @@ Historical Dataset + Lightweight API
 
 ``` text
 retail-intelligence-platform/
+│
 ├── ingestion/
 ├── airflow/
 ├── data/
 │   ├── bronze/
 │   ├── silver/
 │   └── gold/
+│
 ├── warehouse/
-├── dbt/
+│
+├── dbt/          <-- your existing project
+│
 ├── dashboards/
 ├── docs/
 ├── tests/
 ├── docker/
-├── scripts/
+└── scripts/
 ├── .github/
 └── README.md
 ```
