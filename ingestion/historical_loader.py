@@ -6,6 +6,9 @@ from ingestion.transformers import standardize_dataframe
 from ingestion.validators import (
     validate,
     validate_file_exists,
+    validate_not_null_columns,
+    validate_primary_key,
+
 )
 
 
@@ -15,27 +18,27 @@ def load_historical_data(source_files, output_dir):
 
         try:
 
-            validate_file_exists(source_path)
+           schema = SCHEMAS[dataset_name]
 
-            df = read_csv(source_path)
+           validate_file_exists(source_path)
 
-            schema = SCHEMAS[dataset_name]
+           df = read_csv(source_path)
 
-            validate(
+           validate(
                 df=df,
                 dataset_name=dataset_name,
-                required_columns=schema["columns"],
+                schema=schema,
             )
 
-            df = standardize_dataframe(
+           df = standardize_dataframe(
                 df,
                 schema,
-            )
-            output_path = output_dir / f"{dataset_name}.parquet"
+           )
+           output_path = output_dir / f"{dataset_name}.parquet"
 
-            write_parquet(df, output_path)
+           write_parquet(df, output_path)
 
-            print(f"✓ {dataset_name} loaded successfully.")
+           print(f"✓ {dataset_name} loaded successfully.")
 
         except Exception as e:
 

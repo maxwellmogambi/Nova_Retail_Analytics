@@ -47,16 +47,59 @@ def validate_duplicate_columns(df: pd.DataFrame, dataset_name: str) -> None:
         )
 
 
-def validate(df: pd.DataFrame,
-             dataset_name: str,
-             required_columns: list[str]) -> None:
+def validate_not_null_columns(df, columns, dataset_name):
+
+    for col in columns:
+
+        if df[col].isnull().any():
+            raise ValueError(
+                f"{dataset_name}: '{col}' contains NULL values."
+            )
+
+
+def validate_primary_key(df, primary_key, dataset_name):
+
+    duplicates = df.duplicated(
+        subset=primary_key
+    )
+
+    if duplicates.any():
+
+        raise ValueError(
+            f"{dataset_name}: duplicate primary key values detected."
+        )
+
+def validate(
+    df: pd.DataFrame,
+    dataset_name: str,
+    schema: dict,
+) -> None:
     """
-    Run all generic validation checks.
+    Run all validation checks for a dataset.
     """
+
     validate_not_empty(df, dataset_name)
+
     validate_duplicate_columns(df, dataset_name)
+
     validate_required_columns(
         df,
-        required_columns,
+        schema["columns"],
         dataset_name,
     )
+
+    validate_not_null_columns(
+        df,
+        schema["not_null"],
+        dataset_name,
+    )
+
+    validate_primary_key(
+        df,
+        schema["primary_key"],
+        dataset_name,
+    )
+
+
+
+
