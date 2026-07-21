@@ -17,37 +17,43 @@ from ingestion.validators import (
 def load_historical_data(source_files, output_dir):
 
     engine = get_engine()
-    
+
     for dataset_name, source_path in source_files.items():
 
         try:
+            schema = SCHEMAS[dataset_name]
 
-           schema = SCHEMAS[dataset_name]
+            validate_file_exists(source_path)
 
-           validate_file_exists(source_path)
+            df = read_csv(source_path)
 
-           df = read_csv(source_path)
-
-           validate(
+            validate(
                 df=df,
                 dataset_name=dataset_name,
                 schema=schema,
             )
 
-           df = standardize_dataframe(
-                df,
-                engine=engine,
+            df = standardize_dataframe(
+                df=df,
+                schema=schema,
+            )
+
+            output_path = output_dir / f"{dataset_name}.parquet"
+
+            write_parquet(
+                df=df,
+                output_path=output_path,
+            )
+
+            load_dataframe(
+                df=df,
                 table_name=dataset_name,
-                
-           )
-           output_path = output_dir / f"{dataset_name}.parquet"
+                engine=engine,
+            )
 
-           write_parquet(df, output_path)
-
-           print(f"✓ {dataset_name} loaded successfully.")
+            print(f"✓ {dataset_name} loaded successfully.")
 
         except Exception as e:
-
             print(f"✗ {dataset_name}: {e}")
 
 

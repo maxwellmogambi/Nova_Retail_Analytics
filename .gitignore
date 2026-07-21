@@ -38,3 +38,6 @@ Thumbs.db
 data/
 olist_dbt_project.db
 dbt_internal_packages/
+
+# env
+.env
