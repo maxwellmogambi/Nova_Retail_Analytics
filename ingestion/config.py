@@ -1,4 +1,11 @@
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+# Database connection string
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Project Root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
