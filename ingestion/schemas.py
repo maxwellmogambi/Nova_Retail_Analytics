@@ -85,7 +85,7 @@ SCHEMAS = {
             "payment_installments",
             "payment_value",
         ],
-        "primary_key": ["order_id", "payment_sequential"],
+        "primary_key": ["order_id"],
         "datetime_columns": [],
         "numeric_columns": [
             "payment_installments",
@@ -107,7 +107,7 @@ SCHEMAS = {
             "review_creation_date",
             "review_answer_timestamp",
         ],
-        "primary_key": ["review_id"],
+        "primary_key": ["review_id", "order_id"],
         "datetime_columns": [
             "review_creation_date",
             "review_answer_timestamp",
@@ -182,6 +182,11 @@ SCHEMAS = {
             "geolocation_lat",
             "geolocation_lng",
         ],
+        "not_null": [
+            "geolocation_zip_code_prefix",
+            "geolocation_lat",
+            "geolocation_lng"
+        ]
     },
 
     "category_translation": {

@@ -28,7 +28,7 @@ def validate_required_columns(
     """
     missing = set(required_columns) - set(df.columns)
 
-    if missing:
+    if missing: 
         raise ValueError(
             f"{dataset_name} is missing required columns: "
             f"{sorted(missing)}"
@@ -90,13 +90,13 @@ def validate(
 
     validate_not_null_columns(
         df,
-        schema["not_null"],
+        schema.get("not_null", []),
         dataset_name,
     )
 
     validate_primary_key(
         df,
-        schema["primary_key"],
+        schema.get("primary_key", []),
         dataset_name,
     )
 
